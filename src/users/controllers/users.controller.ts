@@ -1,19 +1,25 @@
 import { v4 as UUIDv4 } from 'uuid'
-import { Controller, Get, Post, Param, Body, Delete, Put } from '@nestjs/common'
-import { ApiUseTags, ApiResponse, ApiOperation } from '@nestjs/swagger'
-import { UserIdRequestParamsDto, UserDto } from '../dtos/users.dto'
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+  ApiOperation,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiTags,
+  ApiResponse,
+} from '@nestjs/swagger'
+import { UserDto, UserIdRequestParamsDto } from '../dtos/users.dto'
 
 import { UsersService } from '../services/users.service'
 
 @Controller('users')
-@ApiUseTags('Users')
+@ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   /* Create User */
   /*--------------------------------------------*/
-  @ApiOperation({ title: 'Create User' })
-  @ApiResponse({ status: 200, description: 'Create User.' })
+  @ApiOperation({ summary: 'Create User' })
+  @ApiCreatedResponse({ status: 200, description: 'Create User.' })
   @Post()
   async createUser(@Body() userDto: UserDto): Promise<UserDto> {
     const userId = UUIDv4()
@@ -22,8 +28,8 @@ export class UsersController {
 
   /* Update User */
   /*--------------------------------------------*/
-  @ApiOperation({ title: 'Update User' })
-  @ApiResponse({ status: 200, description: 'Update User.' })
+  @ApiOperation({ summary: 'Update User' })
+  @ApiOkResponse({ status: 200, description: 'Update User.' })
   @Put(':userId')
   async updateUser(
     @Param() userId: UserIdRequestParamsDto,
@@ -34,8 +40,8 @@ export class UsersController {
 
   /* Delete User */
   /*--------------------------------------------*/
-  @ApiOperation({ title: 'Delete User' })
-  @ApiResponse({ status: 200, description: 'Delete User.' })
+  @ApiOperation({ summary: 'Delete User' })
+  @ApiOkResponse({ status: 200, description: 'Delete User.' })
   @Delete(':userId')
   async deleteUser(@Param() userId: UserIdRequestParamsDto) {
     return this.usersService.deleteUser(userId)
@@ -43,7 +49,7 @@ export class UsersController {
 
   /* TODO: List Users */
   /*--------------------------------------------*/
-  @ApiOperation({ title: 'List Users' })
+  @ApiOperation({ summary: 'List Users' })
   @ApiResponse({ status: 200, description: 'List Users.' })
   @Get()
   async findUsers(@Param() param) {
@@ -52,7 +58,7 @@ export class UsersController {
 
   /* TODO: Find User */
   /*--------------------------------------------*/
-  @ApiOperation({ title: 'Get User' })
+  @ApiOperation({ summary: 'Get User' })
   @ApiResponse({ status: 200, description: 'Get User.' })
   @Get(':userId')
   async findOneUser(@Param() userId: UserIdRequestParamsDto) {

@@ -1,4 +1,4 @@
-import { EventPublisher, ICommandHandler, CommandHandler } from '@nestjs/cqrs'
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs'
 import { Logger } from '@nestjs/common'
 import { CreateUserCommand } from '../impl/create-user.command'
 import { UserRepository } from '../../repository/user.repository'
@@ -10,7 +10,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     private readonly publisher: EventPublisher
   ) {}
 
-  async execute(command: CreateUserCommand, resolve: (value?) => void) {
+  async execute(command: CreateUserCommand): Promise<void> {
     Logger.log('Async CreateUserHandler...', 'CreateUserCommand')
 
     const { userDto } = command
@@ -18,6 +18,5 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       await this.repository.createUser(userDto)
     )
     user.commit()
-    resolve()
   }
 }

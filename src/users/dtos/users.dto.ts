@@ -1,4 +1,4 @@
-import { ApiModelProperty } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger'
 import { IsString, IsUUID } from 'class-validator'
 
 export class UserIdRequestParamsDto {
@@ -7,15 +7,15 @@ export class UserIdRequestParamsDto {
 }
 
 export class UserDto {
-  @ApiModelProperty()
+  @ApiProperty()
   @IsUUID('4')
   readonly userId!: string
 
-  @ApiModelProperty()
+  @ApiProperty()
   @IsString()
   readonly firstName!: string
 
-  @ApiModelProperty()
+  @ApiProperty()
   @IsString()
   readonly lastName!: string
 }

@@ -1,6 +1,7 @@
-import { CommandBus, EventBus, CQRSModule } from '@nestjs/cqrs'
-import { OnModuleInit, Module } from '@nestjs/common'
+import { CommandBus, CqrsModule, EventBus } from '@nestjs/cqrs'
+import { Module } from '@nestjs/common'
 import { ModuleRef } from '@nestjs/core'
+import { MongooseModule } from '@nestjs/mongoose'
 import { CommandHandlers } from './commands/handlers'
 import { EventHandlers } from './events/handlers'
 import { UsersSagas } from './sagas/users.sagas'
@@ -13,9 +14,15 @@ import { UserCreatedEvent } from './events/impl/user-created.event'
 import { UserDeletedEvent } from './events/impl/user-deleted.event'
 import { UserUpdatedEvent } from './events/impl/user-updated.event'
 import { UserWelcomedEvent } from './events/impl/user-welcomed.event'
+import { User, UserSchema } from './schemas/user.schema'
+import { UserDto } from './dtos/users.dto'
 
 @Module({
-  imports: [CQRSModule, EventStoreModule.forFeature()],
+  imports: [
+    CqrsModule,
+    EventStoreModule.forFeature(),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+  ],
   controllers: [UsersController],
   providers: [
     UsersService,
@@ -25,7 +32,7 @@ import { UserWelcomedEvent } from './events/impl/user-welcomed.event'
     UserRepository,
   ],
 })
-export class UsersModule implements OnModuleInit {
+export class UsersModule {
   constructor(
     private readonly moduleRef: ModuleRef,
     private readonly command$: CommandBus,
@@ -34,23 +41,29 @@ export class UsersModule implements OnModuleInit {
     private readonly eventStore: EventStore
   ) {}
 
-  onModuleInit() {
-    this.command$.setModuleRef(this.moduleRef)
-    this.event$.setModuleRef(this.moduleRef)
-    /** ------------ */
+  /*
+  OnModuleInit() {
+    // This.command$.setModuleRef(this.moduleRef)
+    // This.event$.setModuleRef(this.moduleRef)
+    /** ------------ *
     this.eventStore.setEventHandlers(this.eventHandlers)
     this.eventStore.bridgeEventsTo((this.event$ as any).subject$)
     this.event$.publisher = this.eventStore
-    /** ------------ */
+    /** ------------ *
     this.event$.register(EventHandlers)
     this.command$.register(CommandHandlers)
-    this.event$.combineSagas([this.usersSagas.userCreated])
+    // This.event$.combineSagas([this.usersSagas.userCreated])
   }
+  */
 
   eventHandlers = {
-    UserCreatedEvent: data => new UserCreatedEvent(data),
-    UserDeletedEvent: data => new UserDeletedEvent(data),
-    UserUpdatedEvent: data => new UserUpdatedEvent(data),
-    UserWelcomedEvent: data => new UserWelcomedEvent(data),
+    UserCreatedEvent: (userData: UserDto): UserCreatedEvent =>
+      new UserCreatedEvent(userData),
+    UserDeletedEvent: (userId: string): UserDeletedEvent =>
+      new UserDeletedEvent(userId),
+    UserUpdatedEvent: (userData: UserDto): UserUpdatedEvent =>
+      new UserUpdatedEvent(userData),
+    UserWelcomedEvent: (userId: string): UserWelcomedEvent =>
+      new UserWelcomedEvent(userId),
   }
 }

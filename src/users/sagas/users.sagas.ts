@@ -1,18 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Observable } from 'rxjs'
-import { ICommand, EventObservable } from '@nestjs/cqrs'
+import { ICommand, Saga, ofType } from '@nestjs/cqrs'
 import { delay, map } from 'rxjs/operators'
 import { UserCreatedEvent } from '../events/impl/user-created.event'
 import { WelcomeUserCommand } from '../commands/impl/welcome-user.command'
 
 @Injectable()
 export class UsersSagas {
-  userCreated = (events$: EventObservable<any>): Observable<ICommand> => {
-    return events$.ofType(UserCreatedEvent).pipe(
+  @Saga()
+  userCreated = (events$: Observable<any>): Observable<ICommand> => {
+    return events$.pipe(
+      ofType(UserCreatedEvent),
       delay(1000),
-      map(event => {
+      map((event) => {
         Logger.log('Inside [UsersSagas] Saga', 'UsersSagas')
-        const userId = event.userDto[0].userId[0]
+        const { userId } = event.userDto
         return new WelcomeUserCommand(userId)
       })
     )

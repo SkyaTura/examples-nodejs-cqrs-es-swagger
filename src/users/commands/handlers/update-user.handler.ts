@@ -1,4 +1,4 @@
-import { EventPublisher, ICommandHandler, CommandHandler } from '@nestjs/cqrs'
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs'
 import { Logger } from '@nestjs/common'
 import { UpdateUserCommand } from '../impl/update-user.command'
 import { UserRepository } from '../../repository/user.repository'
@@ -10,7 +10,7 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
     private readonly publisher: EventPublisher
   ) {}
 
-  async execute(command: UpdateUserCommand, resolve: (value?) => void) {
+  async execute(command: UpdateUserCommand): Promise<void> {
     Logger.log('Async UpdateUserHandler...', 'UpdateUserCommand')
 
     const { userDto } = command
@@ -18,6 +18,5 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
       await this.repository.updateUser(userDto)
     )
     user.commit()
-    resolve()
   }
 }

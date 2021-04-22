@@ -1,24 +1,36 @@
-import { NestFactory, FastifyAdapter } from '@nestjs/core'
-import { ValidationPipe, Logger } from '@nestjs/common'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import { NestFactory } from '@nestjs/core'
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify'
+import { Logger, ValidationPipe } from '@nestjs/common'
+import {
+  DocumentBuilder,
+  SwaggerCustomOptions,
+  SwaggerModule,
+} from '@nestjs/swagger'
 import fastifyCors from 'fastify-cors'
 import { AppModule } from './app.module'
 import { config } from '../config'
 
 async function bootstrap() {
-  const app = await NestFactory.create(
+  const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({
       trustProxy: true,
     })
   )
+
+  app.setGlobalPrefix(config.PREFIX)
+
   const documentOptions = new DocumentBuilder()
     .setTitle(config.TITLE)
     .setDescription(config.DESCRIPTION)
     .setVersion(config.VERSION)
-    .setBasePath(`/${config.PREFIX}`)
     .build()
   const document = SwaggerModule.createDocument(app, documentOptions)
+  const swaggerOptions: SwaggerCustomOptions = {}
+  SwaggerModule.setup('docs', app, document, swaggerOptions)
   const validationOptions = {
     skipMissingProperties: true,
     validationError: { target: false },

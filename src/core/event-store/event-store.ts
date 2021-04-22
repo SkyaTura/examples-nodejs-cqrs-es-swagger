@@ -1,6 +1,6 @@
 import {
-  Injectable,
   Inject,
+  Injectable,
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common'
@@ -12,9 +12,7 @@ import * as xml2js from 'xml2js'
 import * as http from 'http'
 import { config } from '../../../config'
 
-const eventStoreHostUrl = `${config.EVENT_STORE_SETTINGS.protocol}://${
-  config.EVENT_STORE_SETTINGS.hostname
-}:${config.EVENT_STORE_SETTINGS.httpPort}/streams/`
+const eventStoreHostUrl = `${config.EVENT_STORE_SETTINGS.protocol}://${config.EVENT_STORE_SETTINGS.hostname}:${config.EVENT_STORE_SETTINGS.httpPort}/streams/`
 
 /**
  * @class EventStore
@@ -60,14 +58,14 @@ export class EventStore implements IEventPublisher, IMessageSource {
   async bridgeEventsTo<T extends IEvent>(subject: Subject<T>) {
     const streamName = `$ce-${this.category}`
 
-    const onEvent = async event => {
+    const onEvent = async (event) => {
       const eventUrl = `${eventStoreHostUrl}${event.metadata.$o}/${
         event.data.split('@')[0]
       }`
-      http.get(eventUrl, res => {
+      http.get(eventUrl, (res) => {
         res.setEncoding('utf8')
         let rawData = ''
-        res.on('data', chunk => {
+        res.on('data', (chunk) => {
           rawData += chunk
         })
         res.on('end', () => {
