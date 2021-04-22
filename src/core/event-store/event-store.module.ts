@@ -1,6 +1,6 @@
-import { Global, Module, DynamicModule } from '@nestjs/common';
-import { EventStore } from './event-store';
-import { eventStoreProviders } from './event-store.provider';
+import { Global, Module, DynamicModule } from '@nestjs/common'
+import { EventStore } from './event-store'
+import { eventStoreProviders } from './event-store.provider'
 
 @Global()
 @Module({
@@ -23,18 +23,14 @@ export class EventStoreModule {
   static forRoot(): DynamicModule {
     return {
       module: EventStoreModule,
-    };
+    }
   }
 
   static forFeature(): DynamicModule {
     return {
       module: EventStoreModule,
-      providers: [
-        EventStore,
-      ],
-      exports: [
-        EventStore,
-      ],
-    };
+      providers: [EventStore],
+      exports: [EventStore],
+    }
   }
 }

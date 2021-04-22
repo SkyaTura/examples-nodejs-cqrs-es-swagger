@@ -1,13 +1,14 @@
-import { Controller, Get, Post, Param, Body, Delete, Put } from '@nestjs/common';
-import { ApiUseTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
-import { UserIdRequestParamsDto } from '../dtos/users.dto';
-import { UserDto } from '../dtos/users.dto';
-import { UsersService } from '../services/users.service';
+import { v4 as UUIDv4 } from 'uuid'
+import { Controller, Get, Post, Param, Body, Delete, Put } from '@nestjs/common'
+import { ApiUseTags, ApiResponse, ApiOperation } from '@nestjs/swagger'
+import { UserIdRequestParamsDto, UserDto } from '../dtos/users.dto'
+
+import { UsersService } from '../services/users.service'
 
 @Controller('users')
 @ApiUseTags('Users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   /* Create User */
   /*--------------------------------------------*/
@@ -15,8 +16,8 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Create User.' })
   @Post()
   async createUser(@Body() userDto: UserDto): Promise<UserDto> {
-    const userId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-    return this.usersService.createUser({...{userId}, ...userDto});
+    const userId = UUIDv4()
+    return this.usersService.createUser({ ...{ userId }, ...userDto })
   }
 
   /* Update User */
@@ -24,8 +25,11 @@ export class UsersController {
   @ApiOperation({ title: 'Update User' })
   @ApiResponse({ status: 200, description: 'Update User.' })
   @Put(':userId')
-  async updateUser(@Param() userId: UserIdRequestParamsDto, @Body() userDto: UserDto) {
-    return this.usersService.updateUser({...userId, ...userDto});
+  async updateUser(
+    @Param() userId: UserIdRequestParamsDto,
+    @Body() userDto: UserDto
+  ) {
+    return this.usersService.updateUser({ ...userId, ...userDto })
   }
 
   /* Delete User */
@@ -34,7 +38,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Delete User.' })
   @Delete(':userId')
   async deleteUser(@Param() userId: UserIdRequestParamsDto) {
-    return this.usersService.deleteUser(userId);
+    return this.usersService.deleteUser(userId)
   }
 
   /* TODO: List Users */
@@ -43,7 +47,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'List Users.' })
   @Get()
   async findUsers(@Param() param) {
-    return this.usersService.findUsers();
+    return this.usersService.findUsers()
   }
 
   /* TODO: Find User */
@@ -52,6 +56,6 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Get User.' })
   @Get(':userId')
   async findOneUser(@Param() userId: UserIdRequestParamsDto) {
-    return this.usersService.findUsers();
+    return this.usersService.findUsers()
   }
 }

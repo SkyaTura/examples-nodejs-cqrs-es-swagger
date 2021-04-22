@@ -1,11 +1,11 @@
-import dotenv from 'dotenv';
-import pkg from './package.json';
+import dotenv from 'dotenv'
+import pkg from './package.json'
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config()
 
-const envDevelopmentName = 'development';
-const env = process.env.NODE_ENV || envDevelopmentName;
+const envDevelopmentName = 'development'
+const env = process.env.NODE_ENV || envDevelopmentName
 const configs = {
   base: {
     ENV: env,
@@ -25,11 +25,11 @@ const configs = {
     EVENT_STORE_SETTINGS: {
       protocol: process.env.EVENT_STORE_PROTOCOL || 'http',
       hostname: process.env.EVENT_STORE_HOSTNAME || '0.0.0.0',
-      tcpPort: process.env.EVENT_STORE_TCP_PORT ||  1113,
-      httpPort: process.env.EVENT_STORE_HTTP_PORT ||  2113,
+      tcpPort: process.env.EVENT_STORE_TCP_PORT || 1113,
+      httpPort: process.env.EVENT_STORE_HTTP_PORT || 2113,
       credentials: {
-        username: process.env.EVENT_STORE_CREDENTIALS_USERNAME ||  'admin',
-        password: process.env.EVENT_STORE_CREDENTIALS_PASSWORD ||  'changeit',
+        username: process.env.EVENT_STORE_CREDENTIALS_USERNAME || 'admin',
+        password: process.env.EVENT_STORE_CREDENTIALS_PASSWORD || 'changeit',
       },
       poolOptions: {
         min: process.env.EVENT_STORE_POOLOPTIONS_MIN || 1,
@@ -44,7 +44,7 @@ const configs = {
   test: {
     PORT: 7072,
   },
-};
-const config = {...configs.base, ...configs[env]};
+}
+const config = { ...configs.base, ...configs[env] }
 
-export {config};
+export { config }
