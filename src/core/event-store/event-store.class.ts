@@ -1,11 +1,20 @@
-import { EventFactory, TCPClient } from 'geteventstore-promise'
+import {
+  EventFactory,
+  NewEvent,
+  TCPClient,
+  TCPConfig,
+} from 'geteventstore-promise'
 
 /**
  * @class EventStore
  * @description EventStore.org
  */
 export class EventStore {
-  [x: string]: any
+  type: 'event-store'
+
+  client: TCPClient
+
+  eventFactory: EventFactory
 
   /**
    * @constructor
@@ -15,20 +24,20 @@ export class EventStore {
     this.eventFactory = new EventFactory()
   }
 
-  connect(config) {
+  connect(config: TCPConfig): EventStore {
     this.client = new TCPClient(config)
     return this
   }
 
-  getClient() {
+  getClient(): TCPClient {
     return this.client
   }
 
-  newEvent(name, payload) {
+  newEvent(name: string, payload: any): NewEvent {
     return this.eventFactory.newEvent(name, payload)
   }
 
-  close() {
+  close(): EventStore {
     this.client.close()
     return this
   }

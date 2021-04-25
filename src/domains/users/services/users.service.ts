@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { CommandBus } from '@nestjs/cqrs'
-import { User, UserDocument } from 'users/schemas/user.schema'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { UserDto, UserIdRequestParamsDto } from '../dtos/users.dto'
+import {
+  UserDto,
+  UserIdRequestParamsDto,
+  UserDocument,
+} from '../dtos/users.dto'
 import { CreateUserCommand } from '../commands/impl/create-user.command'
 import { UpdateUserCommand } from '../commands/impl/update-user.command'
 import { DeleteUserCommand } from '../commands/impl/delete-user.command'
@@ -12,7 +15,7 @@ import { DeleteUserCommand } from '../commands/impl/delete-user.command'
 export class UsersService {
   constructor(
     private readonly commandBus: CommandBus,
-    @InjectModel(User.name) private userModel: Model<UserDocument>
+    @InjectModel(UserDto.name) private userModel: Model<UserDocument>
   ) {}
 
   createUser(user: UserDto): Promise<UserDto> {
@@ -29,5 +32,10 @@ export class UsersService {
 
   async findUsers(): Promise<UserDocument[]> {
     return await this.userModel.find().lean()
+  }
+
+  async findOneUser(user: UserIdRequestParamsDto): Promise<UserDocument> {
+    const { userId } = user
+    return await this.userModel.findOne({ userId }).lean()
   }
 }

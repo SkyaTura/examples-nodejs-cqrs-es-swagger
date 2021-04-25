@@ -1,5 +1,4 @@
-import { v4 as UUIDv4 } from 'uuid'
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { Controller, Get } from '@nestjs/common'
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
 import { HealthcheckService } from '../services/healthcheck.service'

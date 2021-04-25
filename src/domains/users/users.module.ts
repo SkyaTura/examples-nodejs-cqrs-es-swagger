@@ -8,20 +8,19 @@ import { UsersSagas } from './sagas/users.sagas'
 import { UsersController } from './controllers/users.controller'
 import { UsersService } from './services/users.service'
 import { UserRepository } from './repository/user.repository'
-import { EventStoreModule } from '../core/event-store/event-store.module'
-import { EventStore } from '../core/event-store/event-store'
+import { EventStoreModule } from '../../core/event-store/event-store.module'
+import { EventStore } from '../../core/event-store/event-store'
 import { UserCreatedEvent } from './events/impl/user-created.event'
 import { UserDeletedEvent } from './events/impl/user-deleted.event'
 import { UserUpdatedEvent } from './events/impl/user-updated.event'
 import { UserWelcomedEvent } from './events/impl/user-welcomed.event'
-import { User, UserSchema } from './schemas/user.schema'
-import { UserDto } from './dtos/users.dto'
+import { UserDto, UserSchema } from './dtos/users.dto'
 
 @Module({
   imports: [
     CqrsModule,
     EventStoreModule.forFeature(),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: UserDto.name, schema: UserSchema }]),
   ],
   controllers: [UsersController],
   providers: [
@@ -41,20 +40,18 @@ export class UsersModule {
     private readonly eventStore: EventStore
   ) {}
 
-  /*
-  OnModuleInit() {
+  onModuleInit(): void {
     // This.command$.setModuleRef(this.moduleRef)
     // This.event$.setModuleRef(this.moduleRef)
-    /** ------------ *
+    /** ------------ */
     this.eventStore.setEventHandlers(this.eventHandlers)
     this.eventStore.bridgeEventsTo((this.event$ as any).subject$)
     this.event$.publisher = this.eventStore
-    /** ------------ *
-    this.event$.register(EventHandlers)
-    this.command$.register(CommandHandlers)
+    /** ------------ */
+    this.event$.register()
+    this.command$.register()
     // This.event$.combineSagas([this.usersSagas.userCreated])
   }
-  */
 
   eventHandlers = {
     UserCreatedEvent: (userData: UserDto): UserCreatedEvent =>

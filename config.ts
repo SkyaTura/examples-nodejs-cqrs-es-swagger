@@ -4,6 +4,36 @@ import pkg from './package.json'
 // Load environment variables from .env file
 dotenv.config()
 
+export interface EnvironmentVariables {
+  APP_NAME: string
+  APP_TITLE: string
+  APP_DESCRIPTION: string
+  APP_IMAGE: string
+
+  APP_VERSION: string
+  APP_PREFIX: string
+  APP_API_EXPLORER_PATH: string
+
+  APP_HOST: string
+  APP_PORT: number
+
+  LOG_DIRECTORY: string
+  LOG_FILENAME: string
+  LOG_LEVEL: string
+
+  LOGGLY_TOKEN: string
+  LOGGLY_SUBDOMAIN: string
+
+  ELASTIC_APM_SERVICE_NAME: string
+  ELASTIC_APM_SECRET_TOKEN: string
+  ELASTIC_APM_SERVER_URL: string
+
+  EVENT_STORE_HOSTNAME: string
+  EVENT_STORE_PORT: number
+  EVENT_STORE_CREDENTIALS_USERNAME: string
+  EVENT_STORE_CREDENTIALS_PASSWORD: string
+}
+
 const envDevelopmentName = 'development'
 const env = process.env.NODE_ENV || envDevelopmentName
 const configs = {

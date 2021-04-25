@@ -15,6 +15,7 @@ module.exports = {
     '@typescript-eslint/no-empty-function': ['off'],
     'import/no-extraneous-dependencies': ['off'],
     'max-classes-per-file': ['off'],
+    complexity: ['off'],
     // 'sort-imports': ['error'],
   },
 }

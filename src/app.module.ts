@@ -1,7 +1,8 @@
 import { Module, OnModuleInit } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
-import { UsersModule } from './users/users.module'
-import { HealthcheckModule } from './healthcheck/healthcheck.module'
+import { UsersModule } from './domains/users/users.module'
+import { ServerModule } from './domains/server/server.module'
+import { HealthcheckModule } from './domains/healthcheck/healthcheck.module'
 import { EventStoreModule } from './core/event-store/event-store.module'
 
 @Module({
@@ -19,6 +20,7 @@ import { EventStoreModule } from './core/event-store/event-store.module'
     /** ------------- */
     UsersModule,
     HealthcheckModule,
+    ServerModule,
   ],
 })
 export class AppModule implements OnModuleInit {
