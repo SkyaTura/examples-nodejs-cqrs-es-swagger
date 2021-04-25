@@ -12,10 +12,12 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
 
   async execute(command: DeleteUserCommand): Promise<void> {
     Logger.log('Async DeleteUserHandler...', 'DeleteUserCommand')
+
     const { userDto } = command
     const user = this.publisher.mergeObjectContext(
       await this.repository.deleteUser(userDto)
     )
+
     user.commit()
   }
 }

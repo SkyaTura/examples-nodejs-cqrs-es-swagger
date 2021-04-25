@@ -17,6 +17,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     const user = this.publisher.mergeObjectContext(
       await this.repository.createUser(userDto)
     )
+
     user.commit()
   }
 }

@@ -21,7 +21,7 @@ export class EventStore implements IEventPublisher, IMessageSource {
 
   private eventHandlers: { [key: string]: any }
 
-  private category = 'events'
+  private category = 'users'
 
   private streamName: string
 
